@@ -1,5 +1,3 @@
-#include <iostream>
-
 #ifndef SNAKE_GAME_COORDS_H
 #define SNAKE_GAME_COORDS_H
 

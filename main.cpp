@@ -12,7 +12,7 @@ int main() {
   while (game.isRunning) {
     game.render();
     game.moveHeadAuto();
-    this_thread::sleep_for(chrono::milliseconds(20));
+    this_thread::sleep_for(chrono::milliseconds(40));
   }
 
   return 0;

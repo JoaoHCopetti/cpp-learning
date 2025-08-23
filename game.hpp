@@ -150,7 +150,7 @@ private:
       return '*';
     }
 
-    if (this->coordsMatchTail(x, y)) {
+    if (this->coordIsTail(x, y)) {
       return '*';
     }
 
@@ -162,7 +162,7 @@ private:
            (x == 0 || x == this->width - 1);
   }
 
-  bool coordsMatchTail(int x, int y) {
+  bool coordIsTail(int x, int y) {
     for (Coords tail : this->tail) {
       if (tail.coordsMatch(x, y)) {
         return true;
@@ -172,12 +172,12 @@ private:
     return false;
   }
 
-  bool coordsMatchSnake(int x, int y) {
+  bool coordIsSnake(int x, int y) {
     if (this->head.coordsMatch(x, y)) {
       return true;
     }
 
-    return this->coordsMatchTail(x, y);
+    return this->coordIsTail(x, y);
   }
 
   bool handleBorderHit() {
