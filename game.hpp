@@ -142,11 +142,11 @@ private:
       return '#';
     }
 
-    if (this->head.coordsMatch(x, y)) {
+    if (this->head.matchCoords(x, y)) {
       return 'O';
     }
 
-    if (this->fruit.coordsMatch(x, y)) {
+    if (this->fruit.matchCoords(x, y)) {
       return '*';
     }
 
@@ -164,7 +164,7 @@ private:
 
   bool coordIsTail(int x, int y) {
     for (Coords tail : this->tail) {
-      if (tail.coordsMatch(x, y)) {
+      if (tail.matchCoords(x, y)) {
         return true;
       }
     }
@@ -173,7 +173,7 @@ private:
   }
 
   bool coordIsSnake(int x, int y) {
-    if (this->head.coordsMatch(x, y)) {
+    if (this->head.matchCoords(x, y)) {
       return true;
     }
 

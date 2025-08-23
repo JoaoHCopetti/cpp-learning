@@ -26,7 +26,7 @@ public:
     this->y = y;
   }
 
-  bool coordsMatch(int x, int y) { return this->x == x && this->y == y; }
+  bool matchCoords(int x, int y) { return this->x == x && this->y == y; }
 };
 
 #endif
