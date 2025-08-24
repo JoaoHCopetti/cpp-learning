@@ -4,6 +4,8 @@
 #ifndef SNAKE_GAME_RANDOM_H
 #define SNAKE_GAME_RANDOM_H
 
+namespace chrono = std::chrono;
+
 class Random {
 public:
   int numberBetween(int min, int max) {
@@ -22,11 +24,10 @@ public:
 
 private:
   long int currentTimestamp() {
-    auto now = std::chrono::system_clock::now();
+    auto now = chrono::system_clock::now();
     auto duration = now.time_since_epoch();
 
-    return std::chrono::duration_cast<std::chrono::microseconds>(duration)
-        .count();
+    return chrono::duration_cast<chrono::microseconds>(duration).count();
   }
 };
 

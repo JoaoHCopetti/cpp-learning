@@ -13,13 +13,16 @@ enum Direction { RIGHT, DOWN, LEFT, UP };
 class Game {
 public:
   bool isRunning = true;
+  bool isAI = false;
 
 private:
+  Random random;
+
   string output;
   int width, height;
   int points = 0;
+  Direction lastDirection;
 
-  Random random;
   Coords head;
   Coords fruit;
   vector<Coords> tail;
@@ -54,7 +57,18 @@ public:
     cout << this->output;
   }
 
+  void handleMovement() {
+    if (this->isAI) {
+      this->moveHeadAuto();
+      return;
+    }
+
+    // Handle user input movement
+  }
+
+private:
   void moveHead(Direction dir) {
+    this->lastDirection = dir;
     this->handleTail();
 
     if (dir == RIGHT) {
@@ -77,36 +91,41 @@ public:
   }
 
   void moveHeadAuto() {
+    Direction direction = this->getNextDirection();
+
+    this->moveHead(direction);
+
+    if (this->head.matchCoords(this->fruit.getX(), this->fruit.getY())) {
+      this->onPointScore();
+      this->moveHeadAuto();
+    }
+  }
+
+  Direction getNextDirection() {
     if (this->head.getX() > this->fruit.getX()) {
-      this->moveHead(LEFT);
-      return;
+      return LEFT;
     }
 
     if ((this->head.getX() < this->fruit.getX())) {
-      this->moveHead(RIGHT);
-      return;
+      return RIGHT;
     }
 
     if (this->head.getY() > this->fruit.getY()) {
-      this->moveHead(UP);
-      return;
+      return UP;
     }
 
     if (this->head.getY() < this->fruit.getY()) {
-      this->moveHead(DOWN);
-      return;
+      return DOWN;
     }
-
-    this->onPointScore();
-    this->moveHeadAuto();
   }
 
-private:
   void onPointScore() {
     this->points++;
     this->repositionFruit();
 
     this->tail.push_back(Coords{});
+
+    this->render();
   }
 
   void handleTail() {
@@ -121,18 +140,12 @@ private:
       int prevTailCoordY = prevTail.getY();
 
       this->tail.at(i).setCoords(prevTailCoordX, prevTailCoordY);
-      continue;
     }
   }
 
   void repositionFruit() {
     int randomCoordX = this->random.numberBetween(1, this->width - 2);
     int randomCoordY = this->random.numberBetween(1, this->height - 2);
-
-    // if (this->coordsMatchSnake(randomCoordX, randomCoordY)) {
-    //   this->repositionFruit();
-    //   return;
-    // }
 
     this->fruit.setCoords(randomCoordX, randomCoordY);
   }
@@ -150,7 +163,7 @@ private:
       return '*';
     }
 
-    if (this->coordIsTail(x, y)) {
+    if (this->isCoordTail(x, y)) {
       return '*';
     }
 
@@ -158,11 +171,11 @@ private:
   }
 
   bool isCoordWall(int x, int y) {
-    return (y == 0 || y == this->height - 1) ||
-           (x == 0 || x == this->width - 1);
+    return (x == 0 || x == this->width - 1) ||
+           (y == 0 || y == this->height - 1);
   }
 
-  bool coordIsTail(int x, int y) {
+  bool isCoordTail(int x, int y) {
     for (Coords tail : this->tail) {
       if (tail.matchCoords(x, y)) {
         return true;
@@ -172,12 +185,12 @@ private:
     return false;
   }
 
-  bool coordIsSnake(int x, int y) {
+  bool isCoordSnake(int x, int y) {
     if (this->head.matchCoords(x, y)) {
       return true;
     }
 
-    return this->coordIsTail(x, y);
+    return this->isCoordTail(x, y);
   }
 
   bool handleBorderHit() {

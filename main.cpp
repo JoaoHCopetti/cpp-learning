@@ -6,12 +6,13 @@ using namespace std;
 
 int main() {
   Game game{40, 20};
-  Coords coords;
+
+  game.isAI = true;
 
   while (game.isRunning) {
     game.render();
-    game.moveHeadAuto();
-    this_thread::sleep_for(chrono::milliseconds(40));
+    game.handleMovement();
+    this_thread::sleep_for(chrono::milliseconds(50));
   }
 
   return 0;
