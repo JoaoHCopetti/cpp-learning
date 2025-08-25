@@ -8,7 +8,10 @@ private:
   int x, y;
 
 public:
-  Coords(int x = 0, int y = 0) { this->setCoords(x, y); }
+  Coords(int x = 0, int y = 0) {
+    this->x = x;
+    this->y = y;
+  }
 
   int getX() { return this->x; }
   int getY() { return this->y; }
@@ -21,12 +24,14 @@ public:
   void incrementY() { this->y++; }
   void decrementY() { this->y--; }
 
-  void setCoords(int x, int y) {
-    this->x = x;
-    this->y = y;
+  void setCoords(Coords coords) {
+    this->x = coords.getX();
+    this->y = coords.getY();
   }
 
-  bool matchCoords(int x, int y) { return this->x == x && this->y == y; }
+  bool matchCoords(Coords coords) {
+    return this->x == coords.getX() && this->y == coords.getY();
+  }
 };
 
 #endif
