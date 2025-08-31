@@ -1,4 +1,5 @@
 #include "coords.hpp"
+#include "helpers.hpp"
 #include "random.hpp"
 #include <iostream>
 #include <vector>
@@ -8,14 +9,15 @@ using namespace std;
 #ifndef SNAKE_GAME_H
 #define SNAKE_GAME_H
 
-enum Direction { INVALID, RIGHT, DOWN, LEFT, UP };
+enum Direction { RIGHT, DOWN, LEFT, UP };
+enum GameError { NO_VALID_DIRECTIONS_LEFT };
 
 class Game {
 public:
   bool isRunning = true;
   bool isAI = false;
 
-private:
+public:
   Random random;
 
   string output;
@@ -37,6 +39,7 @@ public:
 
     this->head = Coords{x, y};
     this->repositionFruit();
+    this->lastDirection = RIGHT;
 
     this->tail.push_back(Coords{x - 1, y});
   }
@@ -119,33 +122,46 @@ private:
       return;
     }
 
-    Direction direction = this->getNextDirection();
+    Direction nextDirection = this->getNextDirection();
 
-    if (direction == INVALID) {
-      throw "Impossible";
+    if (this->isDirectionOpposite(nextDirection, this->lastDirection)) {
+      Direction invalidDirections[] = {nextDirection, this->lastDirection};
+
+      nextDirection = this->getRandomValidDirection(invalidDirections);
     }
 
-    this->moveHead(direction);
+    this->moveHead(nextDirection);
+  }
+
+  template <size_t N>
+  Direction getRandomValidDirection(Direction (&invalidDirections)[N]) {
+    vector<Direction> directions = {RIGHT, DOWN, LEFT, UP};
+
+    for (Direction dir : invalidDirections) {
+      removeVectorEl(directions, dir);
+    }
+
+    if (directions.empty()) {
+      throw NO_VALID_DIRECTIONS_LEFT;
+    }
+
+    return this->random.randomElement(directions);
   }
 
   Direction getNextDirection() {
+    Direction nextDirection = this->lastDirection;
+
     if (this->head.getX() > this->fruit.getX()) {
-      return LEFT;
+      nextDirection = LEFT;
+    } else if ((this->head.getX() < this->fruit.getX())) {
+      nextDirection = RIGHT;
+    } else if (this->head.getY() > this->fruit.getY()) {
+      nextDirection = UP;
+    } else if (this->head.getY() < this->fruit.getY()) {
+      nextDirection = DOWN;
     }
 
-    if ((this->head.getX() < this->fruit.getX())) {
-      return RIGHT;
-    }
-
-    if (this->head.getY() > this->fruit.getY()) {
-      return UP;
-    }
-
-    if (this->head.getY() < this->fruit.getY()) {
-      return DOWN;
-    }
-
-    return INVALID;
+    return nextDirection;
   }
 
   void moveHead(Direction dir) {

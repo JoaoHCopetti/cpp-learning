@@ -4,15 +4,18 @@
 
 using namespace std;
 
+void sleep(int ms) { this_thread::sleep_for(chrono::milliseconds(ms)); }
+
 int main() {
   Game game{40, 20};
 
   game.isAI = true;
 
+  string name;
   while (game.isRunning) {
     game.render();
     game.handleMovement();
-    this_thread::sleep_for(chrono::milliseconds(100));
+    getline(cin, name);
   }
 
   return 0;

@@ -1,5 +1,7 @@
 #include <chrono>
 #include <cstdlib>
+#include <iostream>
+#include <vector>
 
 #ifndef SNAKE_GAME_RANDOM_H
 #define SNAKE_GAME_RANDOM_H
@@ -20,6 +22,10 @@ public:
     int randomValue = rand() % 101;
 
     return randomValue < chance;
+  }
+
+  template <typename T> T randomElement(std::vector<T> arr) {
+    return arr.at(this->numberBetween(0, arr.size() - 1));
   }
 
 private:
