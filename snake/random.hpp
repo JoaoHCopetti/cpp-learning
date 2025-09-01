@@ -1,6 +1,5 @@
 #include <chrono>
 #include <cstdlib>
-#include <iostream>
 #include <vector>
 
 #ifndef SNAKE_GAME_RANDOM_H
