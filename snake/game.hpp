@@ -66,7 +66,8 @@ public:
       return;
     }
 
-    // Handle user input movement
+    cout << "You should implement user input movement" << endl;
+    this->isRunning = false;
   }
 
 private:

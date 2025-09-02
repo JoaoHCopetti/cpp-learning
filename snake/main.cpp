@@ -11,11 +11,10 @@ int main() {
 
   game.isAI = true;
 
-  string name;
   while (game.isRunning) {
     game.render();
     game.handleMovement();
-    getline(cin, name);
+    sleep(100);
   }
 
   return 0;
