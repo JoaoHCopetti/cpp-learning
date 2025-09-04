@@ -6,6 +6,12 @@
 
 using namespace std;
 
+#ifdef _WIN32
+#define CLEAR_CONSOLE system("cls")
+#else
+#define CLEAR_CONSOLE system("clear")
+#endif
+
 #ifndef SNAKE_GAME_H
 #define SNAKE_GAME_H
 
@@ -45,7 +51,7 @@ public:
   }
 
   void render() {
-    system("clear");
+    CLEAR_CONSOLE;
 
     this->output = "POINTS: " + to_string(this->points) + "\n\n";
 
